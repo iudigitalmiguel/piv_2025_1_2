@@ -12,6 +12,8 @@ setup(
         "openpyxl",
         "requests==2.32.3",
         "beautifulsoup4==4.13.3",
-        "scikit-learn>=0.24.0"
+        "scikit-learn>=0.24.0",
+        "pandas_datareader>=0.10.0",  # Agregado para obtener datos financieros
+        "yfinance>=0.2.30"            # Agregado como alternativa para Yahoo Finance
     ]
-) 
+)
