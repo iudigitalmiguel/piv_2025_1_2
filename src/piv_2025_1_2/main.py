@@ -324,7 +324,7 @@ def main():
         
         if success:
             print("\n" + "="*60)
-            print("✅ PROCESO COMPLETADO EXITOSAMENTE")
+            print("PROCESO COMPLETADO EXITOSAMENTE")
             print("="*60)
             
             if args.mode in ['full', 'etl', 'model']:
@@ -349,7 +349,7 @@ def main():
         
     except Exception as e:
         logger.error('Main', 'main', f'Error crítico: {e}')
-        print(f"\n❌ Error crítico: {e}")
+        print(f"\nError crítico: {e}")
         
     finally:
         logger.info('Main', 'main', '=== FINALIZANDO PIPELINE VIX ===')
