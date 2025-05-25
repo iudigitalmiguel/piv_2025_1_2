@@ -1,0 +1,39 @@
+REPORTE RESUMEN - PIPELINE ETL VIX
+========================================
+
+Fecha de ejecución: 2025-05-25 11:00:02
+
+DATOS PROCESADOS:
+--------------------
+Registros extraídos: 251
+Período: 2024-05-23 00:00:00-05:00 a 2025-05-23 00:00:00-05:00
+Columnas originales: 8
+Columnas enriquecidas: 86
+Features añadidas: 78
+
+ESTADÍSTICAS DEL VIX:
+-------------------------
+Valor mínimo: 11.93
+Valor máximo: 52.33
+Valor promedio: 18.63
+Desviación estándar: 5.96
+Último valor: 22.29
+
+DISTRIBUCIÓN POR NIVELES:
+------------------------------
+Normal: 149 días (59.4%)
+Low: 51 días (20.3%)
+High: 51 días (20.3%)
+
+ARCHIVOS GENERADOS:
+--------------------
+• src/piv_2025_1_2/static/data/vix_data.csv - Datos crudos
+• src/piv_2025_1_2/static/data/vix_data_enricher.csv - Datos enriquecidos
+• src/piv_2025_1_2/static/models/model.pkl - Modelo entrenado
+• src/piv_2025_1_2/static/models/model_metadata.json - Metadata del modelo
+• src/piv_2025_1_2/static/reports/ - Reportes generados
+
+SIGUIENTE PASO:
+---------------
+Ejecutar dashboard interactivo:
+streamlit run models/dashboard.py

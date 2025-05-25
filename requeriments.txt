@@ -2,3 +2,25 @@ pandas==1.3.5
 numpy==1.21.5
 pandas_datareader==0.10.0
 yfinance==0.1.70
+
+/* actividad 2 */
+# Dependencias básicas
+pandas==1.5.3
+numpy==1.24.3
+matplotlib==3.7.2
+seaborn==0.12.2
+
+# Descarga de datos financieros
+yfinance==0.2.18
+pandas-datareader==0.10.0
+
+# Machine Learning
+scikit-learn==1.3.0
+
+# Dashboard interactivo
+streamlit==1.28.1
+plotly==5.17.0
+
+# Utilidades adicionales
+requests==2.31.0
+openpyxl==3.1.2  # Para archivos Excel

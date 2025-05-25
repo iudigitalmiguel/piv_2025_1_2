@@ -30,7 +30,7 @@ class Logger:
         self.logger.setLevel(logging.INFO)
         
         # Handler para archivo
-        file_handler = logging.FileHandler(log_file)
+        file_handler = logging.FileHandler(log_file, encoding='utf-8')
         file_handler.setLevel(logging.INFO)
         
         # Handler para consola

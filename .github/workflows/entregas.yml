@@ -27,9 +27,30 @@ jobs:
         run: pip install --upgrade pip
       - name: Paso 6 - instalar dependencias
         run: pip install -e .
+      - name: Paso 6.5 - Crear directorios
+        run: |
+          mkdir -p static/data static/models static/reports logs
+        shell: bash        
       - name: Paso 7 - Ejecutar Script de main
         run: python src/piv_2025_1_2/main.py
         #run: python prueba.py
+      - name: Paso 8 - Entrenar modelo (opcional)
+        run: |
+          if [ -f "src/piv_2025_1_2/static/data/vix_data_enricher.csv" ]; then
+            echo "Datos encontrados, entrenando modelo..."
+            cd src/piv_2025_1_2 && python main.py --mode model
+          else
+            echo "No hay datos enriquecidos, saltando modelo"
+          fi
+        shell: bash
+        continue-on-error: true
+      - name: Paso 9 - Verificar resultados
+        run: |
+          echo "=== ARCHIVOS GENERADOS ==="
+          [ -f "src/piv_2025_1_2/static/data/vix_data.csv" ] && echo "✅ vix_data.csv" || echo "❌ vix_data.csv"
+          [ -f "src/piv_2025_1_2/static/data/vix_data_enricher.csv" ] && echo "✅ vix_data_enricher.csv" || echo "❌ vix_data_enricher.csv"
+          [ -f "src/piv_2025_1_2/static/models/model.pkl" ] && echo "✅ model.pkl" || echo "❌ model.pkl"
+        shell: bash    
 
       - name: Commit and Push changes
         uses: stefanzweifel/git-auto-commit-action@v5
