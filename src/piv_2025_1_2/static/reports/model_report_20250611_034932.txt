@@ -1,0 +1,33 @@
+REPORTE DE MODELO PREDICTIVO - ÍNDICE VIX
+==================================================
+
+Fecha de entrenamiento: 2025-06-11 03:49:32
+Tipo de modelo: random_forest
+
+MÉTRICAS DE EVALUACIÓN:
+-------------------------
+RMSE (Test): 9.3456
+MAE (Test): 9.0049
+R² (Test): -2.1097
+MAPE (Test): 41.23%
+Precisión Direccional: 45.00%
+
+INTERPRETACIÓN DE MÉTRICAS:
+------------------------------
+• RMSE: Error cuadrático medio (menor es mejor)
+• MAE: Error absoluto medio (menor es mejor)
+• R²: Coeficiente de determinación (1.0 es perfecto)
+• MAPE: Error porcentual absoluto medio
+• Precisión Direccional: % de predicciones correctas de dirección
+
+CALIDAD DEL MODELO: Requiere mejora
+
+JUSTIFICACIÓN DE MÉTRICAS:
+------------------------------
+Se seleccionó RMSE como métrica principal porque:
+1. Penaliza más los errores grandes (importante para VIX)
+2. Está en las mismas unidades que el VIX
+3. Es estándar para problemas de regresión
+
+MAE complementa RMSE al ser menos sensible a outliers.
+R² indica qué porcentaje de varianza explica el modelo.
