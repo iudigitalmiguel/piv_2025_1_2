@@ -50,6 +50,7 @@
   ],
   "train_size": 160,
   "test_size": 41,
+<<<<<<< HEAD
   "training_date": "2025-06-10T20:18:46.708929",
   "metrics": {
     "train_rmse": 1.4246615026068399,
@@ -60,5 +61,17 @@
     "test_r2": -2.1097448175394877,
     "test_mape": 41.22706964216068,
     "directional_accuracy": 45.0
+=======
+  "training_date": "2025-05-25T20:36:51.392867",
+  "metrics": {
+    "train_rmse": 0.8335570954466137,
+    "train_mae": 0.5535351139250443,
+    "train_r2": 0.9336879184153178,
+    "test_rmse": 8.675941751290393,
+    "test_mae": 6.027127543629174,
+    "test_r2": -0.09971216897553892,
+    "test_mape": 18.82109336305588,
+    "directional_accuracy": 50.0
+>>>>>>> 807c6e50f81f6ab1da6932e7d081e4322aa269ac
   }
 }
