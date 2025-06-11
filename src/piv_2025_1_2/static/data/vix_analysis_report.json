@@ -1,14 +1,14 @@
 {
-  "fecha_reporte": "2025-05-25 14:38",
-  "periodo_datos": "2024-05-23 a 2025-05-23",
+  "fecha_reporte": "2025-06-10 20:25",
+  "periodo_datos": "2024-06-10 a 2025-06-10",
   "total_registros": 251,
   "estadisticas_basicas": {
-    "vix_promedio": 18.629083665338644,
-    "vix_mediana": 17.21,
-    "vix_std": 5.957316674222725,
-    "vix_min": 11.93,
+    "vix_promedio": 18.852390438247014,
+    "vix_mediana": 17.69,
+    "vix_std": 5.8366373078124525,
+    "vix_min": 11.94,
     "vix_max": 52.33,
-    "vix_actual": 22.29
+    "vix_actual": 16.95
   },
   "distribucion_niveles": {
     "Normal": 149,
@@ -16,10 +16,10 @@
     "High": 51
   },
   "indicadores_actuales": {
-    "rsi": 45.72,
-    "ma20": 21.38,
-    "ma50": 25.27,
-    "volatilidad_20d": 2.79
+    "rsi": 45.91,
+    "ma20": 18.53,
+    "ma50": 24.92,
+    "volatilidad_20d": 1.37
   },
   "retornos": {
     "diario": null,

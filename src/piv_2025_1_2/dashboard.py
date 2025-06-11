@@ -37,22 +37,115 @@ class VIXDashboard:
             # Cargar datos crudos
             if os.path.exists("src/piv_2025_1_2/static/data/vix_data.csv"):
                 self.df_raw = pd.read_csv("src/piv_2025_1_2/static/data/vix_data.csv", decimal=',')
-                self.df_raw['Date'] = pd.to_datetime(self.df_raw['Date'])
+                
+                # Conversión de fecha más flexible
+                if 'Date' in self.df_raw.columns:
+                    try:
+                        # Intentar conversión automática primero
+                        self.df_raw['Date'] = pd.to_datetime(self.df_raw['Date'])
+                        st.success("✅ Conversión de fecha automática exitosa")
+                    except Exception as date_error:
+                        st.warning(f"⚠️ Error en conversión automática: {date_error}")
+                        try:
+                            # Intentar con formato ISO8601
+                            self.df_raw['Date'] = pd.to_datetime(self.df_raw['Date'], format='ISO8601')
+                            st.success("✅ Conversión de fecha ISO8601 exitosa")
+                        except Exception as iso_error:
+                            st.warning(f"⚠️ Error ISO8601: {iso_error}")
+                            try:
+                                # Intentar con formato mixto
+                                self.df_raw['Date'] = pd.to_datetime(self.df_raw['Date'], format='mixed')
+                                st.success("✅ Conversión de fecha mixta exitosa")
+                            except Exception as mixed_error:
+                                st.error(f"❌ Todos los formatos de fecha fallaron: {mixed_error}")
+                                # Mostrar muestra de datos para debugging
+                                st.write("🔍 Muestra de datos de fecha:")
+                                st.write(self.df_raw['Date'].head())
+                                return False
+            else:
+                st.error("❌ No se encontró el archivo vix_data.csv")
+                return False
             
             # Cargar datos enriquecidos
             if os.path.exists("src/piv_2025_1_2/static/data/vix_data_enricher.csv"):
-                self.df_enriched = pd.read_csv("static/data/vix_data_enricher.csv", decimal=',')
-                self.df_enriched['Date'] = pd.to_datetime(self.df_enriched['Date'])
+                self.df_enriched = pd.read_csv("src/piv_2025_1_2/static/data/vix_data_enricher.csv", decimal=',')
+                
+                # Conversión de fecha para datos enriquecidos
+                if 'Date' in self.df_enriched.columns:
+                    try:
+                        self.df_enriched['Date'] = pd.to_datetime(self.df_enriched['Date'])
+                        st.success("✅ Conversión de fecha en datos enriquecidos exitosa")
+                    except:
+                        try:
+                            self.df_enriched['Date'] = pd.to_datetime(self.df_enriched['Date'], format='ISO8601')
+                            st.success("✅ Conversión ISO8601 en datos enriquecidos exitosa")
+                        except:
+                            try:
+                                self.df_enriched['Date'] = pd.to_datetime(self.df_enriched['Date'], format='mixed')
+                                st.success("✅ Conversión mixta en datos enriquecidos exitosa")
+                            except:
+                                st.warning("⚠️ Error en conversión de fecha de datos enriquecidos")
+            else:
+                # Si no hay datos enriquecidos, usar los datos crudos
+                if self.df_raw is not None:
+                    st.info("ℹ️ Creando datos enriquecidos desde datos crudos...")
+                    self.df_enriched = self.df_raw.copy()
+                    
+                    # Agregar indicadores básicos
+                    if 'Close' in self.df_enriched.columns:
+                        self.df_enriched['Daily_Change'] = self.df_enriched['Close'].pct_change() * 100
+                        self.df_enriched['MA20'] = self.df_enriched['Close'].rolling(window=20).mean()
+                        self.df_enriched['MA50'] = self.df_enriched['Close'].rolling(window=50).mean()
+                        
+                        # RSI
+                        delta = self.df_enriched['Close'].diff()
+                        gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
+                        loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
+                        rs = gain / loss
+                        self.df_enriched['RSI'] = 100 - (100 / (1 + rs))
+                        
+                        # VIX Level
+                        self.df_enriched['VIX_Level'] = pd.cut(
+                            self.df_enriched['Close'], 
+                            bins=[0, 20, 30, 100], 
+                            labels=['Low', 'Normal', 'High']
+                        )
+                        
+                        # Volatilidad
+                        self.df_enriched['Volatility_20d'] = self.df_enriched['Close'].rolling(window=20).std()
+                        
+                        # Columnas adicionales para gráficos
+                        self.df_enriched['MACD'] = 0  # Placeholder
+                        self.df_enriched['ATR'] = self.df_enriched['Close'].rolling(window=14).std()
+                        self.df_enriched['BB_Position'] = 0.5  # Placeholder
+                        
+                        # Día de la semana
+                        if 'Date' in self.df_enriched.columns:
+                            self.df_enriched['WeekdayName'] = self.df_enriched['Date'].dt.day_name()
+                        
+                        st.success("✅ Indicadores técnicos agregados")
             
             # Cargar información del modelo
             if os.path.exists("src/piv_2025_1_2/static/models/model_metadata.json"):
                 import json
                 with open("src/piv_2025_1_2/static/models/model_metadata.json", 'r') as f:
                     self.model_info = json.load(f)
+                st.success("✅ Metadata del modelo cargada")
             
-            return True
+            # Verificar que tenemos datos
+            if self.df_enriched is not None and len(self.df_enriched) > 0:
+                st.success(f"🎉 Datos cargados exitosamente: {len(self.df_enriched)} registros")
+                st.write(f"📅 Periodo: {self.df_enriched['Date'].min()} - {self.df_enriched['Date'].max()}")
+                st.write(f"🔤 Columnas: {list(self.df_enriched.columns)}")
+                return True
+            else:
+                st.error("❌ No se pudieron cargar datos válidos")
+                return False
+            
         except Exception as e:
             st.error(f"Error al cargar datos: {e}")
+            import traceback
+            st.error(f"Traceback completo: {traceback.format_exc()}")
             return False
     
     def calculate_kpis(self):
